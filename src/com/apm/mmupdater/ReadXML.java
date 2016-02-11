@@ -27,63 +27,25 @@ import org.xml.sax.SAXException;
 
 public class ReadXML {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws TransformerConfigurationException {
 		
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document doc = builder.parse("/Users/yoral01/Desktop/ManagementModule.xml");
-
-			
-			
-
-			
-// ***Get ACTION
-			Node action = doc.getElementsByTagName("Action").item(1);
-			NamedNodeMap actionAttributes = action.getAttributes();
-			Node actionValues = actionAttributes.getNamedItem("DescriptionContentType");
-
-			
-			Attr galaxy = doc.createAttribute("galaxy");
-			actionAttributes.setNamedItem(galaxy);
-		
-// ****   Add new Attribute			
-			galaxy.setValue("milky way");
-			actionAttributes.setNamedItem(galaxy);
-			
-			//Node action = attr.getNamedItem("Action");
-//			System.out.println("Action value = " + actionValues);
-			
-			
-			Element dataTag = doc.getDocumentElement();
-			Element ActionTag =  (Element) dataTag.getElementsByTagName("Action").item(0);
-			Element newPerson = doc.createElement("person");
-			System.out.println("newPerson = " + newPerson);
-			
-			Element firstName = doc.createElement("firstName");
-			firstName.setTextContent("Tom");
-			
-			
-			
-			TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
-			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File("/Users/yoral01/Desktop/Person.xml"));
-			transformer.transform(source, result);
-
-			System.out.println("Done");
-			
 			
 // *** Get Email Distro List
 			Node test = doc.getElementsByTagName("Parameter").item(4);
 			NamedNodeMap attr = test.getAttributes();
 			Node emailValue = attr.getNamedItem("Value");
 			System.out.println("emailValue = " + emailValue);
-			if (emailValue.equals("Introscope.iSSNRC.Alerts@ssa.gov")){
-				emailValue.removeChild(actionValues);
-			}
-			System.out.println("emailValue = " + emailValue);
-			System.out.println("Action value = " + actionValues);
+			
+			// *** Get ActionDataGroup
+						
+			Node actionData = doc.getElementsByTagName("DataGroup").item(0);
+			NamedNodeMap attrAction = actionData.getAttributes();
+			Node actionValue = attrAction.getNamedItem("xsi:type");
+			System.out.println("ActionData = " + actionValue);
 			
 		//***Append v10 Action Stuff
 			Element actionAdd = doc.createElement("actionTest");
@@ -116,12 +78,6 @@ public class ReadXML {
 			e.printStackTrace();
 		} catch (IOException e) {
 			System.out.println("This Broke");
-			e.printStackTrace();
-		} catch (TransformerConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
