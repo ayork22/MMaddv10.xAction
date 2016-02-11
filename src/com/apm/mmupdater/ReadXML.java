@@ -52,19 +52,34 @@ public class ReadXML {
 			for (int i = 0; i < list.getLength() ; i++) {
 				Element item = (Element)list.item(i);
 				NamedNodeMap attrAction1 = item.getAttributes();
+				
 				Node actionValue1 = attrAction1.getNamedItem("xsi:type");
-//				System.out.println("ActionData = " + actionValue1);
+				System.out.println("ActionData = " + actionValue1);
 			
 				if (actionValue1 == actionValue ){
-					System.out.println("Here is the ActionDataGroup");	
+					System.out.println("Here is the ActionDataGroup");
+				    Node actionNode = createActionNode(doc);
+				    item.appendChild(actionNode);   
+				   
+				    Node concreteClassNode = createConcreteClassNode(doc);
+				    actionNode.appendChild(concreteClassNode);
+				    
+				    Node emailNode = createEmailNode(doc);
+				    concreteClassNode.appendChild(emailNode);
 				}			
-			}		
+			}				
+			
 			// write the content into xml file
-//			TransformerFactory transformerFactory = TransformerFactory.newInstance();
-//			Transformer transformer = transformerFactory.newTransformer();
-//			DOMSource source = new DOMSource(doc);
-//			StreamResult result = new StreamResult(new File("/Users/yoral01/Desktop/test.xml"));
-//			transformer.transform(source, result);
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			DOMSource source = new DOMSource(doc);
+			StreamResult result = new StreamResult(new File("/Users/yoral01/Desktop/v10Added.xml"));
+			try {
+				transformer.transform(source, result);
+			} catch (TransformerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println("Done");
 		} catch (ParserConfigurationException e) {
 			//System.out.println("This Broke");
@@ -77,5 +92,76 @@ public class ReadXML {
 			e.printStackTrace();
 		}
 	}
+	
+	  public static Node createActionNode(Document document) {
+
+		    // create FirstName and LastName elements
+		    Element name = document.createElement("Name");
+		    Element description = document.createElement("Description");
+		    Element actionName = document.createElement("ActionName");
+
+		    name.appendChild(document.createTextNode("v10 SMTP Mail Action"));
+		    actionName.appendChild(document.createTextNode("SendSMTPMailAction"));
+
+		    // create contact element
+		    Element contact = document.createElement("Action");
+
+		    // create attribute
+		    Attr genderAttribute = document.createAttribute("IsActive");
+		    genderAttribute.setValue("true");
+		    
+		    Attr newAttribute = document.createAttribute("DescriptionContentType");
+		    newAttribute.setValue("text/plain");
+
+		    // append attribute to contact element
+		    contact.setAttributeNode(genderAttribute);
+		    contact.setAttributeNode(newAttribute);
+		    contact.appendChild(name);
+		    contact.appendChild(description);
+		    contact.appendChild(actionName);
+
+		    return contact;
+		  }
+	  public static Node createConcreteClassNode(Document document) {
+
+		    // create FirstName and LastName elements
+		    Element name = document.createElement("ConcreteClassData");
+//		    Element contact = document.createElement("ConcreteClassData");
+//		    contact.appendChild(name);
+		    return name;
+		  }
+	  
+	  public static Node createEmailNode(Document document) {
+
+		    // create FirstName and LastName elements
+		  	Element smtpHost = document.createElement("SMTPHost");
+		  	smtpHost.appendChild(document.createTextNode("smtp.gmail.com"));
+		  	Element smtpSender = document.createElement("SMTPSender");
+		  	smtpSender.appendChild(document.createTextNode("INTROSCOPE@CA.com"));
+		  	Element smtpRecipient = document.createElement("SMTPRecipient");
+		  	smtpRecipient.appendChild(document.createTextNode("false"));
+		  	Element sendShortText = document.createElement("SendShortText");
+		  	sendShortText.appendChild(document.createTextNode("false"));
+		  	Element sendPlainText = document.createElement("SendPlainText");
+		  	sendPlainText.appendChild(document.createTextNode("agyork22@gmail.com"));
+		  	Element subjectText = document.createElement("SubjectText");
+		  	subjectText.appendChild(document.createTextNode("CA APM Alert from ${EM_Host}: ${Alert_Name} in ${Alert_State} state"));
+		  	Element bodyText = document.createElement("BodyText");
+		  	bodyText.appendChild(document.createTextNode("Alert Name: ${Alert_Name}Time Triggered: ${Alert_Time}"));
+		  	
+		  	
+		    Element email = document.createElement("EmailData");
+//		    Element contact1 = document.createElement("ConcreteClassData");
+//		    contact1.appendChild(name);
+		    
+		    email.appendChild(smtpHost);
+		    email.appendChild(smtpSender);
+		    email.appendChild(smtpRecipient);
+		    email.appendChild(sendShortText);
+		    email.appendChild(sendPlainText);
+		    email.appendChild(subjectText);
+		    email.appendChild(bodyText);
+		    return email;
+		  }
 }
 
