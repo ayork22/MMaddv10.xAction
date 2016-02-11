@@ -35,40 +35,36 @@ public class ReadXML {
 			Document doc = builder.parse("/Users/yoral01/Desktop/ManagementModule.xml");
 			
 // *** Get Email Distro List
-			Node test = doc.getElementsByTagName("Parameter").item(4);
-			NamedNodeMap attr = test.getAttributes();
-			Node emailValue = attr.getNamedItem("Value");
-			System.out.println("emailValue = " + emailValue);
+//			Node test = doc.getElementsByTagName("Parameter").item(4);
+//			NamedNodeMap attr = test.getAttributes();
+//			Node emailValue = attr.getNamedItem("Value");
+//			System.out.println("emailValue = " + emailValue);
 			
-			// *** Get ActionDataGroup
-						
-			Node actionData = doc.getElementsByTagName("DataGroup").item(0);
+			//Gets ActionDataGroup
+			Node actionData = doc.getElementsByTagName("DataGroup").item(6);
 			NamedNodeMap attrAction = actionData.getAttributes();
 			Node actionValue = attrAction.getNamedItem("xsi:type");
-			System.out.println("ActionData = " + actionValue);
-			
-		//***Append v10 Action Stuff
-			Element actionAdd = doc.createElement("actionTest");
-			actionAdd.appendChild(doc.createTextNode("v10EMAILaction"));
-			
-			
-			NodeList list = doc.getElementsByTagName("mail.smtp.recipient");
-			System.out.println("There are " + list.getLength() + " items");
+//			System.out.println("ActionData = " + actionValue);
+					
+			NodeList list = doc.getElementsByTagName("DataGroup");
+//			System.out.println("There are " + list.getLength() + " DataGroups");
 			
 			for (int i = 0; i < list.getLength() ; i++) {
 				Element item = (Element)list.item(i);
-				System.out.println(item.getFirstChild().getNodeValue());
-				System.out.println(item.getTagName());
-				System.out.println(item.getLastChild());
-			}
+				NamedNodeMap attrAction1 = item.getAttributes();
+				Node actionValue1 = attrAction1.getNamedItem("xsi:type");
+//				System.out.println("ActionData = " + actionValue1);
 			
+				if (actionValue1 == actionValue ){
+					System.out.println("Here is the ActionDataGroup");	
+				}			
+			}		
 			// write the content into xml file
 //			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 //			Transformer transformer = transformerFactory.newTransformer();
 //			DOMSource source = new DOMSource(doc);
 //			StreamResult result = new StreamResult(new File("/Users/yoral01/Desktop/test.xml"));
 //			transformer.transform(source, result);
-
 			System.out.println("Done");
 		} catch (ParserConfigurationException e) {
 			//System.out.println("This Broke");

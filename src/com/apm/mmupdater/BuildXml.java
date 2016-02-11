@@ -17,12 +17,10 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Attr;
-import org.w3c.dom.CDATASection;
-import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.ProcessingInstruction;
+
 
 public class BuildXml {
   private Document document;
@@ -36,15 +34,12 @@ public class BuildXml {
       parserException.printStackTrace();
     }
 
-    Element root = document.createElement("root");
+    Element root = document.createElement("test");
     document.appendChild(root);
 
-    // add comment to XML document
-    Comment simpleComment = document.createComment("This is a simple contact list");
-    root.appendChild(simpleComment);
-
-    // add child element
-//    Node contactNode = createContactNode(document);
+    
+    
+    // add child element using method <Action>
     Node actionNode = createActionNode(document);
     root.appendChild(actionNode);
     
@@ -53,15 +48,6 @@ public class BuildXml {
     
     Node emailNode = createEmailNode(document);
     concreteClassNode.appendChild(emailNode);
-
-    // add processing instruction
-    ProcessingInstruction pi = document.createProcessingInstruction("myInstruction",
-        "action silent");
-    root.appendChild(pi);
-
-    // add CDATA section
-    CDATASection cdata = document.createCDATASection("I can add <, >, and ?");
-    root.appendChild(cdata);
 
     // write the XML document to disk
     try {
@@ -143,7 +129,15 @@ public class BuildXml {
 	  	Element smtpSender = document.createElement("SMTPSender");
 	  	smtpSender.appendChild(document.createTextNode("INTROSCOPE@CA.com"));
 	  	Element smtpRecipient = document.createElement("SMTPRecipient");
-	  	smtpRecipient.appendChild(document.createTextNode("agyork22@gmail.com"));
+	  	smtpRecipient.appendChild(document.createTextNode("false"));
+	  	Element sendShortText = document.createElement("SendShortText");
+	  	sendShortText.appendChild(document.createTextNode("false"));
+	  	Element sendPlainText = document.createElement("SendPlainText");
+	  	sendPlainText.appendChild(document.createTextNode("agyork22@gmail.com"));
+	  	Element subjectText = document.createElement("SubjectText");
+	  	subjectText.appendChild(document.createTextNode("CA APM Alert from ${EM_Host}: ${Alert_Name} in ${Alert_State} state"));
+	  	Element bodyText = document.createElement("BodyText");
+	  	bodyText.appendChild(document.createTextNode("Alert Name: ${Alert_Name}Time Triggered: ${Alert_Time}"));
 	  	
 	  	
 	    Element email = document.createElement("EmailData");
@@ -153,6 +147,10 @@ public class BuildXml {
 	    email.appendChild(smtpHost);
 	    email.appendChild(smtpSender);
 	    email.appendChild(smtpRecipient);
+	    email.appendChild(sendShortText);
+	    email.appendChild(sendPlainText);
+	    email.appendChild(subjectText);
+	    email.appendChild(bodyText);
 	    return email;
 	  }
 //  EmailData
