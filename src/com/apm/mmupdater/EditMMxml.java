@@ -75,7 +75,7 @@ public class EditMMxml {
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File("/Users/yoral01/DevStuff/SSAv10MMs/Addedv10xmlTest/PUSR03_ISSNRC/ManagementModule.xml"));
+			StreamResult result = new StreamResult(new File("/tmp/ManagementModule.xml"));
 			try {
 				transformer.transform(source, result);
 			} catch (TransformerException e) {
