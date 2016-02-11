@@ -35,16 +35,18 @@ public class ReadXML {
 			Document doc = builder.parse("/Users/yoral01/Desktop/ManagementModule.xml");
 			
 // *** Get Email Distro List
-//			Node test = doc.getElementsByTagName("Parameter").item(4);
-//			NamedNodeMap attr = test.getAttributes();
-//			Node emailValue = attr.getNamedItem("Value");
-//			System.out.println("emailValue = " + emailValue);
+			Node test = doc.getElementsByTagName("Parameter").item(4);
+			NamedNodeMap attr = test.getAttributes();
+			Node emailValue = attr.getNamedItem("Value");
+			System.out.println("emailValue = " + emailValue);
+			String emailVal = emailValue.toString();
+			System.out.println(emailVal);
 			
 			//Gets ActionDataGroup
 			Node actionData = doc.getElementsByTagName("DataGroup").item(6);
 			NamedNodeMap attrAction = actionData.getAttributes();
 			Node actionValue = attrAction.getNamedItem("xsi:type");
-//			System.out.println("ActionData = " + actionValue);
+			System.out.println("ActionDataTest = " + actionValue);
 					
 			NodeList list = doc.getElementsByTagName("DataGroup");
 //			System.out.println("There are " + list.getLength() + " DataGroups");
@@ -54,7 +56,7 @@ public class ReadXML {
 				NamedNodeMap attrAction1 = item.getAttributes();
 				
 				Node actionValue1 = attrAction1.getNamedItem("xsi:type");
-				System.out.println("ActionData = " + actionValue1);
+				System.out.println("DataGroup = " + actionValue1);
 			
 				if (actionValue1 == actionValue ){
 					System.out.println("Here is the ActionDataGroup");
@@ -64,7 +66,7 @@ public class ReadXML {
 				    Node concreteClassNode = createConcreteClassNode(doc);
 				    actionNode.appendChild(concreteClassNode);
 				    
-				    Node emailNode = createEmailNode(doc);
+				    Node emailNode = createEmailNode(doc, emailVal);
 				    concreteClassNode.appendChild(emailNode);
 				}			
 			}				
@@ -73,7 +75,7 @@ public class ReadXML {
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File("/Users/yoral01/Desktop/v10Added.xml"));
+			StreamResult result = new StreamResult(new File("/Users/yoral01/DevStuff/SSAv10MMs/Addedv10xmlTest/PUSR03_ISSNRC/ManagementModule.xml"));
 			try {
 				transformer.transform(source, result);
 			} catch (TransformerException e) {
@@ -131,7 +133,7 @@ public class ReadXML {
 		    return name;
 		  }
 	  
-	  public static Node createEmailNode(Document document) {
+	  public static Node createEmailNode(Document document, String emaildata) {
 
 		    // create FirstName and LastName elements
 		  	Element smtpHost = document.createElement("SMTPHost");
@@ -139,11 +141,11 @@ public class ReadXML {
 		  	Element smtpSender = document.createElement("SMTPSender");
 		  	smtpSender.appendChild(document.createTextNode("INTROSCOPE@CA.com"));
 		  	Element smtpRecipient = document.createElement("SMTPRecipient");
-		  	smtpRecipient.appendChild(document.createTextNode("false"));
+		  	smtpRecipient.appendChild(document.createTextNode(emaildata.replaceAll("Value=\"", "").replace("\"", "")));
 		  	Element sendShortText = document.createElement("SendShortText");
 		  	sendShortText.appendChild(document.createTextNode("false"));
 		  	Element sendPlainText = document.createElement("SendPlainText");
-		  	sendPlainText.appendChild(document.createTextNode("agyork22@gmail.com"));
+		  	sendPlainText.appendChild(document.createTextNode("false"));
 		  	Element subjectText = document.createElement("SubjectText");
 		  	subjectText.appendChild(document.createTextNode("CA APM Alert from ${EM_Host}: ${Alert_Name} in ${Alert_State} state"));
 		  	Element bodyText = document.createElement("BodyText");
